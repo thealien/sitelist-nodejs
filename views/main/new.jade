@@ -1,0 +1,46 @@
+extends ../layouts/main
+
+block add_css
+    if links
+        - var favIconSprite = ''
+        - var favIcon = [];
+        - for l, index in links
+            - favIconSprite += l.domain+'/';
+            - favIcon.push(".fav_"+index+" {background-position: 0 -"+(index * 16)+"px;}")
+        - favIcon = favIcon.join(' ');
+        style(type="text/css")
+            .faviconed {background: url(http://favicon.yandex.ru/favicon/#{favIconSprite}) 0 0 no-repeat; width:16px; height:16px; float:right;}
+            #{favIcon}
+
+block menu_new
+    li.menu-item
+        a.current(href='/new/') Новые сайты
+
+block content
+    if links
+        for l, index in links
+            .new-site
+                .photo.left
+                    a(href='/link/#{l.id}/#{l.domain}/')
+                        img.photo(width='200', src='/foto/t_#{l.foto}', alt='#{l.title}')
+                .favicon.left
+                    if l.domain!=false
+                        div(class='faviconed fav_#{index}')
+                .site.right
+                    h2.name
+                        a(title='#{l.title}', href='/link/#{l.id}/#{l.domain}/') #{l.title}
+                    p.desc #{cut(l.desc, 250)}
+                    div
+                        ul.site-rate(id='site#{l.id}')
+                            li.rate
+                                a(title=l.voted?'Вы уже голосовали':'Нравится', class='site#{l.id} t-up'+(l.voted?'':' active'), href='javascript:void(0)')
+                            li( class='rate-value site#{l.id}', title='Рейтинг: #{l.rate} [голосов: #{l.votes}]') #{l.rate}
+                            li.rate
+                                a(title=l.voted?'Вы уже голосовали':'Не нравится', class='site#{l.id} t-down'+(l.voted?'':' active'), href='javascript:void(0)')
+                .clear
+        br
+    else
+        h3
+            | оУ! <br>
+            | Походу сайтеги потерялися... или ты набрал страницу. которой нет...хзхз. <br>
+            | ну, лучше тебе пойти на главную, там уж точно есть, что глянуть ;)

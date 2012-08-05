@@ -1,0 +1,84 @@
+extends base
+
+block head_bottom
+    .left
+        nav
+            block menu
+                ul#head-menu
+                    block menu_main
+                        li.menu-item
+                            a(href='/') Главная
+                    block menu_top
+                        li.menu-item
+                            a(href='/top/') Рейтинг сайтов
+                    block menu_new
+                        li.menu-item
+                            a(href='/new/') Новые сайты
+                    block menu_users
+                        li.menu-item
+                            a(href='/users/') Пользователи
+                    block menu_feedback
+                        li.menu-item
+                            a(href='/feedback/') Обратная связь
+                    block menu_about
+                        li.menu-item
+                            a(href='/about/') О проекте
+    #head-search.right
+        .left.rss_twitter_fb
+            block rss_link
+                a.rss_twitter_fb.rss(target='_blank', href='/rss/', title='RSS-лента новых сайтов')
+            a.rss_twitter_fb.twitter(target='_blank', href='http://twitter.com/sitelistin', title='Наша лента в Twitter')
+            a.rss_twitter_fb.facebook(target='_blank', href='http://www.facebook.com/sitelist.in', title='Мы в Facebook')
+            a.rss_twitter_fb.vk(target='_blank', href='http://vkontakte.ru/sitelist', title='Мы ВКонтакте')
+        #search-bg.left
+            form#search-form(action='/search/')
+                input.s-input.left(placeholder='я ищу...', name='q', value='')
+                input.s-btn.right(type='submit', value='')
+
+block main_content
+    #main-content.left
+        block content
+    #sidebar.right
+        block sidebar
+            //- Юзерпанель
+                .text
+
+                    | Вы вошли как
+                    b: a(href='/user/Yii.user.name/') Yii.user.name
+                    form.right(action='/logout/', method='post')
+                    input.logout_btn(type='submit', name='logout[]', value='выйти', title='Выйти', onclick='return confirm("Действительно выйти?")')
+
+                    a(href='/login/') Вход
+                    | или
+                    a(href='/register/') Регистрация
+
+                br
+            block bookmarklet
+                // Букмарклет
+                #bm-block
+                    h2.title Добавить сайт в каталог за 2 клика?
+                    br
+                    p
+                        | Это очень просто!<br> 
+                        | Наше приложение <strong>Bookmarklet</strong> позволит вам быстро это сделать. 
+                        | Просто перетяните кнопку, расположенную ниже, на панель вашего 
+                        | браузера и все готово.
+                        br
+                        a#bm-btn(title='Добавить сайт', href="javascript:eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('i e(h){2 5=4.k(\'q\');l(2 3=0;3<5.p;3++){o(5[3].n.f()==h.f()){b 5[3].r}}b\'\'}i 8(){2 c=\'j://8.m/A/\';2 1=\'\';1=4.a.D.d()+\'//\'+4.a.F.d();1=1.t(/^\\s|\\s$/g,\'\');1=9(1);2 6=4.E;6=9(6);2 7=e(\'C\');7=9(7);B.v(c+\'?u=w&amp;\'+\'x=\'+1+\'&amp;z=\'+6+\'&amp;y=\'+7)}8();',42,42,'|sitelist_url|var|counter|document|my_arr|sitelist_title|sitelist_desc|sitelist|encodeURIComponent|location|return|destination|toString|GetMetaValue|toLowerCase||meta_name|function|http|getElementsByTagName|for|in|name|if|length|META|content||replace|source|open|bookmarklet|bookmarklet_url|bookmarklet_desc|bookmarklet_title|add|window|description|protocol|title|hostname'.split('|'),0,{}))", style='margin-left: -4px;')
+                            img(width='226', height='62', src='http://i.sitelist.in/bm-btn.png', alt='Букмарклет для добавления сайтов')
+            br
+            block lastLinks
+                if lastLinks
+                    // Новые сайты
+                    #new-sites-block
+                        h2
+                            a.title(href='/new/') Новые сайты
+                        br
+                        for link in lastLinks
+                            p: a.name(href='/link/#{link.id}/#{link.domain}/', title="#{link.title}") #{link.title}
+                            p.desc #{cut(link.desc, 150)}
+                            br
+                            p.image
+                                a.name(href='/link/#{link.id}/#{link.domain}', title="#{link.title}")
+                                    img.image(width='200', src='/foto/t_#{link.foto}', alt='#{link.title}')
+    .clear

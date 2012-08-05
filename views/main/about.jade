@@ -1,0 +1,45 @@
+extends ../layouts/main
+
+block menu_about
+    li.menu-item
+        a.current(href='about') О проекте
+
+block bookmarklet
+
+block content
+    .forms
+        h2.title О проекте
+        br
+        p
+            strong SiteList 
+            | &mdash; это каталог современных и качественных сайтов.
+            br
+            | Все ресурсы тщательно отобраны, проверены на работоспособность и рассортированы по категориям. 
+            | Здесь вы не найдете унылых сайтов-визиток, кривых интернет-магазинов, сайтов-однодневок и других жалких подобий интернет-страничек. 
+            | Мы собрали для вас только лучшее!
+            br
+            br
+            | Наш каталог пополняется ежедневно. Чтобы следить за обновлениями, подпишитесь на 
+            a(href='/rss/') RSS
+            | , либо присоединитесь к группе в одной из ваших любимых соц.сетей (
+            a(href='http://www.facebook.com/sitelist.in', target='_blank') Facebook
+            |  | 
+            a(href='http://vkontakte.ru/sitelist', target='_blank') Вконтакте
+            | ).
+            br
+            br
+            | Все вопросы о сотрудничестве направляйте через 
+            a(href='/feedback/') обратную связь
+            br
+            br
+            | Если вы хотите помочь в развитии проекта, то просто расскажите своим друзьям о сайте 
+            a(href='/') SiteList.in
+            |  &mdash; это будет для нас лучшей благодарностью :)
+    br
+    iframe(
+        src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fsitelist.in&amp;width=700&amp;height=182&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=false&amp;appId=254883967891239" 
+        scrolling="no" 
+        frameborder="0" 
+        style="border:none; overflow:hidden; width:700px; height:182px;" 
+        allowTransparency="true"
+    )

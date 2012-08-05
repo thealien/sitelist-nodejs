@@ -1,0 +1,136 @@
+!!! 5
+html(lang="ru")
+    block head
+        head
+            meta(
+                http-equiv="Content-Type" 
+                content="text/html charset=utf-8"
+            )
+            meta(
+                name="description" 
+                content="SiteList.in - каталог только качественных сайтов."
+            )
+            meta(
+                name="keywords" 
+                content="sitelist, сайтлист, каталог сайтов, web 2.0 сайты, подборка сайтов, добавить сайт, предложить сайт, белый каталог сайтов, рейтинг сайтов"
+			)
+            - if(title)
+                - defaultTitle = title+' &mdash; '+defaultTitle;
+            title #{defaultTitle}
+            link(
+		        rel="alternate" 
+		        type="application/atom+xml" 
+                title="Новые сайты в каталоге SiteList.in" 
+                href="/main/rss"
+            )
+            block add_meta
+            link(
+                href="/favicon.ico"
+                type="image/x-icon"
+                rel="shortcut icon"
+            )
+            link(
+                href="/images/opera_sd.png"
+                rel="image_src" 
+                type="image/png"
+            )
+            link(
+                href="/css/style.css?20120527" 
+                rel="stylesheet" 
+                type="text/css"
+            )
+            block add_css
+            script(
+                type='text/javascript'
+				src='/js/extsrc.min.js?20110502'
+			)
+            block add_head
+    block body
+        body
+            div#main
+                div#head
+                    div#head-top
+                        a#head-top-logo(href='/')
+                    div#head-middle
+                        div(style='float:left; padding-top: 30px;')
+                            div.left
+                                a(href='/')
+                                    img(
+                                        width='461'
+    								    height='82'
+    								    alt='На главную'
+    								    title='На главную'
+    								    src='/images/head/logo.png'
+                                    )
+                            div#head-desc.left(style='margin-top: 5px;')
+                                p(style='font-size:18px; color: white;') Каталог сайтов
+                                p
+                                br
+                                p Все добавляемые ресурсы проходят строгую модерацию. Здесь только интересные и качественные сервисы.
+                        div#head-add-btn.right
+                            a(href='link/add')
+                                img(
+                                    width='126'
+    								height='126'
+    								src='/images/head/add_site_t.png'
+    								alt='Добавить сайт'
+    								title='Добавить сайт'
+    							)
+                        div.clear
+                    div#head-bottom
+                        block head_bottom
+                            div.left
+                                nav
+                                    block menu
+                        div.clear
+                div#content
+                    block main_content
+                br
+                div#footer-padding
+            div#footer
+                block footer
+                    div.info
+                        div.left.desc
+                            p(style='color:gray; font-size:10px')
+                                b SiteList
+                                — это 
+                                strong каталог современных и качественных сайтов. 
+                                |Здесь вы не найдете унылых сайтов-визиток,
+                                br
+                                |кривых интернет-магазинов, сайтов-однодневок и других жалких подобий интернет-страничек. У нас только лучшее! 
+                                br
+                                Рейтинги сайтов, описание новинок, отзывы &mdash; <strong>все это в каталоге сайтов Рунета и не только</strong>.
+                        div.copyright.right
+                            p
+                                a(href='/') sitelist.in
+                                | &copy; 2008–2012
+                            p powered by 
+                                a(target='_blank', href='http://nodejs.org') Node.js
+            a.idea-lamp(title='У меня есть идея, предложение или вопрос!', href='javascript: void(0)', onclick='CopinyWidget.show(); return false;')
+            script(type='text/javascript', src='/js/jquery-1.7.1.min.js')
+            block add_js
+            // copiny
+            script(type="text/javascript", charset="utf-8").
+                var proto = (document.location.protocol=='https:')?'https:':'http:';
+                var host = proto+'//widget.copiny.com';
+                document.write(unescape("%3Cscript extsrc='" + host + "/static/js/widget.js' type='text/javascript'%3E%3C/script%3E"));
+
+            // copiny
+            script(type='text/javascript', extsrc='/js/func.js?20111209')
+
+            // Yandex.Metrika counter
+            div(style="display:none;")
+                script(type="text/javascript").
+                    (function(w, c) {
+                        (w[c] = w[c] || []).push(function() {
+                            try {
+                                w.yaCounter488379 = new Ya.Metrika({id:488379,
+                                    clickmap:true,
+                                    trackLinks:true, webvisor:true});
+                            }
+                            catch(e) { }
+                        });
+                    })(window, "yandex_metrika_callbacks");
+            script(extsrc="//mc.yandex.ru/metrika/watch.js", type="text/javascript", defer="defer")
+            noscript: div: img(src="//mc.yandex.ru/watch/488379", style="position:absolute; left:-9999px;", alt="")
+            // /Yandex.Metrika counter

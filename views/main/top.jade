@@ -1,0 +1,38 @@
+extends ../layouts/main
+
+block add_css
+    if links
+        - var favIconSprite = ''
+        - var favIcon = [];
+        - for l, index in links
+            - favIconSprite += l.domain+'/';
+            - favIcon.push(".fav_"+index+" {background-position: 0 -"+(index * 16)+"px;}")
+        - favIcon = favIcon.join(' ');
+        style(type="text/css")
+            .faviconed {background: url(http://favicon.yandex.ru/favicon/#{favIconSprite}) 0 0 no-repeat; width:16px; height:16px; float:right;}
+            #{favIcon}
+
+block menu_top
+    li.menu-item
+        a.current(href='/top/') Рейтинг сайтов
+
+block content
+    if links
+        for l, index in links
+            .top-site
+                .rate.left
+                    div(class='rate-value '+((page==1 && index<3)?' hover':'')) #{l.rate}
+                .favicon.left
+                    if l.domain!=false
+                        div(class='faviconed fav_#{index}')
+                .site.right
+                    h2.name
+                        a(title='#{l.title}', href='/link/#{l.id}/#{l.domain}') #{l.title}
+                    p.desc #{cut(l.desc, 250)}
+                .clear
+        br
+    else
+        h3
+            | оУ! <br>
+            | Походу сайтеги потерялися... или ты набрал страницу. которой нет...хзхз. <br>
+            | ну, лучше тебе пойти на главную, там уж точно есть, что глянуть ;)

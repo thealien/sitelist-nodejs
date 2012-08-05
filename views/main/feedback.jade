@@ -1,0 +1,41 @@
+extends ../layouts/main
+
+block menu_feedback
+    li.menu-item
+        a.current(href='/feedback/') Обратная связь
+
+block bookmarklet
+
+block content
+    #feedback
+        form.forms(method='post', action='')
+            h2.title Контакты
+            br
+            p
+                b ICQ:&nbsp;
+                a(target="_blank", href="http://www.icq.com/people/466499433/") 466-499-433
+            p
+                b Микроблог разработчика:&nbsp;
+                a(target="_blank", href="http://sitelist.microbloggy.ru/") sitelist.microbloggy.ru
+            br
+            br
+            h2.title Обратная связь
+            br
+            p.
+                Если вы нашли какую-либо ошибку, хотите предложить сотрудничество или просто отправить нам сообщение,
+                заполните форму ниже, указав адрес электропочты и текст послания.
+            br
+            .fields
+                p
+                    span#feedback-result
+                br
+                p.label Email
+                p
+                    input#email(name="email", placeholder = "Ваш email", size = "50")
+                br
+                p.label Сообщение
+                p
+                    textarea#message(name='text', rows='5', cols='78')
+                br
+                p
+                    input.send-btn(type="submit", value="", name='yt0')

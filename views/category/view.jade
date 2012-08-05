@@ -1,0 +1,54 @@
+extends ../layouts/main
+
+block add_meta
+    if category
+        link(
+            rel="alternate"
+            type="application/atom+xml"
+            title="Новые сайты в каталоге SiteList.in - #{category.catname}"
+            href="/rss/#{category.alias}/"
+        )
+
+block rss_link
+    a.rss_twitter_fb.rss(target='_blank', href="/rss/#{category.alias}/", title='RSS-лента новых сайтов в категории "#{category.catname}")
+
+block add_css
+    if category.links
+        - var favIconSprite = ''
+        - var favIcon = [];
+        - for l, index in category.links
+            - favIconSprite += l.domain+'/';
+            - favIcon.push(".fav_"+index+" {background-position: 0 -"+(index * 16)+"px;}")
+        - favIcon = favIcon.join(' ');
+        style(type="text/css")
+            .faviconed {background: url(http://favicon.yandex.ru/favicon/#{favIconSprite}) 0 0 no-repeat; width:16px; height:16px; float:right;}
+            #{favIcon}
+
+block bookmarklet
+
+block content
+    #category-head
+        .left.category-info
+            div(class="left cat-logo cat-#{category.alias}")
+            .left.info
+                p.name #{category.catname}
+                p.link-count= word_ending(category.linksCount, "сайт сайта сайтов")
+        .clear
+    if category.links
+        for l, index in category.links
+            .cat-site
+                .favicon.left
+                    if l.domain
+                        div(class="faviconed fav_#{index}")
+                .right.site
+                    h2.name
+                        a(title='#{l.title}', href='/link/#{l.id}/#{l.domain}/') #{l.title}
+                        if l.isNew()
+                            sup.new  new
+                    p.desc #{ cut(l.desc, 250)}
+                .clear
+            //<div>   // TODO
+            //    {{ cat_paginator }}
+            //</div>
+    else
+        h3 Нет ссылок в данной категории

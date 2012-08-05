@@ -1,0 +1,17 @@
+extends ../layouts/main
+block menu_main
+    li.menu-item
+        a.current(href='/') Главная
+
+block content
+    ul#cat-list
+        for cat in categories
+            li.cat-item
+                .left(class="cat-logo cat-#{cat.alias}")
+                    a.cat-logo-link(href='/category/#{cat.id}/#{cat.alias}')
+                .right.info
+                    p.cat-name
+                        a(href='/category/#{cat.id}/#{cat.alias}') #{cat.catname}
+                    p.cat-links-cnt= word_ending(cat.linksCount, "сайт сайта сайтов")
+                if cat.newLinksCount > 0
+                    .subcat-cnt(title='Новых сайтов за последние 3 дня') #{cat.newLinksCount}
