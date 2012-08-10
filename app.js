@@ -64,12 +64,6 @@ app.get('/top/:page', routes.top);
 app.get('/new', routes.new);
 app.get('/new/:page', routes.new);
 
-//app.get('/add', routes.link_add);
-
-//app.get('/login', routes.user_login);
-//app.post('/logout', routes.user_logout);
-//app.get('/register', routes.user_register);
-//app.get('/reminder', routes.recover_pass_request);
 
 
 

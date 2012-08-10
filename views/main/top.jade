@@ -30,6 +30,7 @@ block content
                         a(title='#{l.title}', href='/link/#{l.id}/#{l.domain}') #{l.title}
                     p.desc #{cut(l.desc, 250)}
                 .clear
+        div.paginator!= pagination.render()
         br
     else
         h3

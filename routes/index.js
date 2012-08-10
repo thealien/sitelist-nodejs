@@ -1,4 +1,7 @@
-var models = require('../models');
+var models = require('../models'),
+    LinkPager = require('../views/widgets/LinkPager.js');
+
+var pager = LinkPager.create(20, 10);
 
 // Main page
 exports.index = function(req, res){
@@ -48,21 +51,29 @@ exports.category = function(req, res, next){
 exports.top = function(req, res, next){
     var page = parseInt(req.params.page, 10) || 1;
     var limit = 20;
-    models.Link.findAll({
-        where: { visible: true },
-        order: 'rate DESC',
-        offset: limit * (page-1),
-        limit: limit
-    }).done(function(error, links){
-            if(links.length< 1){
-                res.send(404); return;
-            }
-            res.render('main/top', {
-                title: 'Рейтинг сайтов',
-                links: links,
-                page: page
+    models.Link.count({where: { visible: true }}).ok(function(count){
+        models.Link.findAll({
+            where: { visible: true },
+            order: 'rate DESC',
+            offset: limit * (page-1),
+            limit: limit
+        }).done(function(error, links){
+                if(links.length< 1){
+                    res.send(404); return;
+                }
+                res.render('main/top', {
+                    title: 'Рейтинг сайтов',
+                    links: links,
+                    page: page,
+                    pagination: pager.configure({
+                        currentPage:    page,
+                        itemsCount:     count,
+                        urlPrefix:      '/top/',
+                        urlPostfix:     ''
+                    })
+                });
             });
-        });
+    });
 }
 
 // Last links
