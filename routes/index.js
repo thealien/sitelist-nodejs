@@ -65,9 +65,11 @@ exports.top = function(req, res, next){
                     title: 'Рейтинг сайтов',
                     links: links,
                     page: page,
-                    pagination: pager.configure({
+                    pagination: pager.build({
                         currentPage:    page,
                         itemsCount:     count,
+                        //urlFormat:      '/top/#page#/'
+                        //url: '/top?test=qwe'
                         urlPrefix:      '/top/',
                         urlPostfix:     ''
                     })
