@@ -2,6 +2,7 @@ var models = require('../models'),
     LinkPager = require('../views/widgets/LinkPager.js');
 
 var pager = LinkPager.create(20, 10);
+var pagerUsers = LinkPager.create(30, 10);
 
 // Main page
 exports.index = function(req, res){
@@ -58,7 +59,7 @@ exports.top = function(req, res, next){
             offset: limit * (page-1),
             limit: limit
         }).done(function(error, links){
-                if(links.length< 1){
+                if(error || links.length< 1){
                     res.send(404); return;
                 }
                 res.render('main/top', {
@@ -82,23 +83,80 @@ exports.top = function(req, res, next){
 exports.new = function(req, res, next){
     var page = parseInt(req.params.page, 10) || 1;
     var limit = 20;
-    models.Link.findAll({
-        where: { visible: true },
-        order: 'id DESC',
-        offset: limit * (page-1),
-        limit: limit
-    }).done(function(error, links){
-            if(links.length< 1){
-                res.send(404); return;
-            }
-            res.render('main/new', {
-                title: 'Рейтинг сайтов',
-                links: links,
-                page: page
+    models.Link.count({where: { visible: true }}).ok(function(count){
+        models.Link.findAll({
+            where: { visible: true },
+            order: 'id DESC',
+            offset: limit * (page-1),
+            limit: limit
+        }).done(function(error, links){
+                if(error || links.length< 1){
+                    res.send(404); return;
+                }
+                res.render('main/new', {
+                    title: 'Рейтинг сайтов',
+                    links: links,
+                    page: page,
+                    pagination: pager.build({
+                        currentPage:    page,
+                        itemsCount:     count,
+                        urlPrefix:      '/new/',
+                        urlPostfix:     ''
+                    })
+                });
             });
-        });
+    });
 }
 
 // Users
+exports.users = function(req, res, next){
+    var page = parseInt(req.params.page, 10) || 1;
+    var limit = 30;
+    models.User.count().ok(function(count){
+        models.User.getAll(
+            limit*(page-1),
+            limit,
+            'DESC',
+            function(error, users){
+                if(error){
+                    res.send(404); return;
+                }
+                res.render('main/users', {
+                    title: 'Пользователи',
+                    users: users,
+                    page: page,
+                    pagination: pagerUsers.build({
+                        currentPage:    page,
+                        itemsCount:     count,
+                        urlPrefix:      '/users/',
+                        urlPostfix:     ''
+                    })
+                });
+            }
+        );
+
+        /*
+        models.User.findAll({
+            order: 'userID DESC',
+            offset: limit * (page-1),
+            limit: limit
+        }).done(function(error, users){
+                if(error || users.length< 1){
+                    res.send(404); return;
+                }
+                res.render('main/users', {
+                    title: 'Пользователи',
+                    users: users,
+                    page: page,
+                    pagination: pagerUsers.build({
+                        currentPage:    page,
+                        itemsCount:     count,
+                        urlPrefix:      '/users/',
+                        urlPostfix:     ''
+                    })
+                });
+            });   */
+    });
+}
 
 

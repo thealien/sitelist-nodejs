@@ -51,18 +51,31 @@ app.locals({
     defaultTitle: 'Каталог сайтов SiteList',
     title: false
 });
+//
+//Params
+//
+
+
 // -----------------------------------------------------------------------------
 // Routes
 // -----------------------------------------------------------------------------
 app.all('*', getLastLinks);
 app.get('/', routes.index);
+
 app.get('/about', routes.about);
+
 app.get('/feedback', routes.feedback);
+
 app.get('/category/:id*', routes.category);
+
 app.get('/top', routes.top);
 app.get('/top/:page', routes.top);
+
 app.get('/new', routes.new);
 app.get('/new/:page', routes.new);
+
+app.get('/users', routes.users);
+app.get('/users/:page', routes.users);
 
 
 

@@ -1,4 +1,5 @@
-var config = require('../config').db;
+var config  = require('../config').db;
+var util    = require('util');
 var Sequelize = require('sequelize'),
     db = new Sequelize(config.dbname, config.username, config.password, {
         host: config.host,
@@ -65,8 +66,26 @@ var self = module.exports = {
 	}, {
         // TODO
 		classMethods: {
-			staticExample: function(){
-				this.name
+			getAll: function(offset, limit, order, callback){
+                switch(order.toLowerCase()){
+                    case 'desc':
+                        break;
+                    case 'asc':
+                    default:
+                        order = 'asc';
+                }
+                var sql = [
+                    "SELECT u.*, p.* " +
+                    "FROM users u " +
+                    "LEFT JOIN profile p on p.user_id = u.userID " +
+                    "ORDER BY userID %s " +
+                    "LIMIT %d, %d"
+                ].join('');
+                sql = util.format(sql, order.toUpperCase(), parseInt(offset, 10), parseInt(limit, 10));
+                db.query(sql, null, {raw: true}).done(function(error, result){
+                    if (error) callback(error);
+                    callback(null, result);
+                });
 			}
 		}
 	}),
@@ -334,15 +353,44 @@ var self = module.exports = {
 	
 	//
 	//
-	//
+	// TODO
 	Profile: db.define('profile', {
 		//`user_id` int(10) unsigned NOT NULL,
+        user_id: {
+            type:           Sequelize.INTEGER,
+            primaryKey:     true,
+            allowNull:      false
+        },
 		//`birthday` varchar(10) NOT NULL,
+        birthday: {
+            type:       Sequelize.STRING,
+            allowNull: false
+        },
 		//`site` varchar(255) NOT NULL,
+        site: {
+            type:       Sequelize.STRING,
+            allowNull:   false
+        },
 		//`skype` varchar(100) NOT NULL,
+        skype: {
+            type:       Sequelize.STRING,
+            allowNull:   false
+        },
 		//`icq` varchar(15) NOT NULL,
+        icq: {
+            type:       Sequelize.STRING,
+            allowNull:   false
+        },
 		//`from` varchar(255) NOT NULL,
+        from: {
+            type:       Sequelize.STRING,
+            allowNull:   false
+        },
 		//`avatar` varchar(45) NOT NULL,
+        avatar: {
+            type:       Sequelize.STRING,
+            allowNull:   false
+        }
 		//PRIMARY KEY (`user_id`)
 	}, {
 		
@@ -390,7 +438,8 @@ var self = module.exports = {
 	})
 };
 
-
+self.Profile.hasOne(self.User, { foreignKey: 'user_id' });
+self.User.belongsTo(self.Profile);
 
 
 

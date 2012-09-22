@@ -34,10 +34,11 @@ block content
                         ul.site-rate(id='site#{l.id}')
                             li.rate
                                 a(title=l.voted?'Вы уже голосовали':'Нравится', class='site#{l.id} t-up'+(l.voted?'':' active'), href='javascript:void(0)')
-                            li( class='rate-value site#{l.id}', title='Рейтинг: #{l.rate} [голосов: #{l.votes}]') #{l.rate}
+                            li( class='rate-value site#{l.id}', title='Рейтинг: #{l.rate} [голосов: #{l.votes}]') #{rateFormat(l.rate)}
                             li.rate
                                 a(title=l.voted?'Вы уже голосовали':'Не нравится', class='site#{l.id} t-down'+(l.voted?'':' active'), href='javascript:void(0)')
                 .clear
+        div.paginator!= pagination.render()
         br
     else
         h3

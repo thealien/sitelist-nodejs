@@ -24,3 +24,7 @@ exports.cut = function cut(s, l){
 	s = ''+s;
     return (s.length > l) ? (s.substr(0, l)+'...') : s;
 }
+
+exports.rateFormat = function(rate){
+    return ( rate>0?'+':'' ) + rate;
+}

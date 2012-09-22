@@ -1,0 +1,22 @@
+extends ../layouts/main
+
+block menu_users
+    li.menu-item
+        a.current(href='/user/') Пользователи
+
+block content
+    if users
+        #users
+            for user in users
+                .user
+                    .left
+                        a(href='/user/#{user.username}')
+                            //if user.profile.avatar
+                            if user.avatar
+                                img.avatar(src='/images/avatars/t_#{user.avatar}', alt='Аватар пользователя')
+                            else
+                                img.avatar(src='/images/user/noavatar.gif', alt='Аватар пользователя')
+                        a(href='/user/#{user.username}') #{user.username}
+        .clear
+        div.paginator!= pagination.render()
+        br
