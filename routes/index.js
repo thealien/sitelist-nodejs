@@ -1,4 +1,5 @@
 var models = require('../models'),
+    util = require('util'),
     LinkPager = require('../views/widgets/LinkPager.js');
 
 var pager = LinkPager.create(20, 10);
@@ -26,24 +27,39 @@ exports.feedback = function(req, res){
 // Category
 exports.category = function(req, res, next){
     var id = parseInt(req.params.id, 10);
+    console.log(req.params);
+    var page = parseInt(req.params.page, 10) || 1;
+    var limit = 20;
     models.Category.find(id).done(function(error, category){
         if (!category) {
             res.send(404);
             return;
         }
-        models.Link.findAll({
-            where: {
-                catid: category.id,
-                visible: true
-            },
-            order: 'id DESC'
-        }).done(function(error, links){
-            category.links = links;
-            category.linksCount = links.length || 0;
-            res.render('category/view', {
-                title: category.catname,
-                category: category
-            });
+        var where = {
+            catid: category.id,
+            visible: true
+        }
+        models.Link.count({where: where}).ok(function(count){
+            models.Link.findAll({
+                where: where,
+                order: 'id DESC',
+                offset: limit * (page-1),
+                limit: limit
+            }).done(function(error, links){
+                    category.links = links;
+                    category.linksCount = links.length || 0;
+                    res.render('category/view', {
+                        title: category.catname,
+                        category: category,
+                        page: page,
+                        pagination: pager.build({
+                            currentPage:    page,
+                            itemsCount:     count,
+                            urlPrefix:      util.format('/category/%d/dev/', category.id),
+                            urlPostfix:     ''
+                        })
+                    });
+                });
         });
     });
 }
@@ -134,28 +150,6 @@ exports.users = function(req, res, next){
                 });
             }
         );
-
-        /*
-        models.User.findAll({
-            order: 'userID DESC',
-            offset: limit * (page-1),
-            limit: limit
-        }).done(function(error, users){
-                if(error || users.length< 1){
-                    res.send(404); return;
-                }
-                res.render('main/users', {
-                    title: 'Пользователи',
-                    users: users,
-                    page: page,
-                    pagination: pagerUsers.build({
-                        currentPage:    page,
-                        itemsCount:     count,
-                        urlPrefix:      '/users/',
-                        urlPostfix:     ''
-                    })
-                });
-            });   */
     });
 }
 

@@ -66,6 +66,7 @@ app.get('/about', routes.about);
 
 app.get('/feedback', routes.feedback);
 
+app.get('/category/:id/:slug/:page', routes.category);
 app.get('/category/:id*', routes.category);
 
 app.get('/top', routes.top);

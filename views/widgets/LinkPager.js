@@ -84,10 +84,11 @@ LinkPager.prototype.render = function(config){
         lastStep= c.lastPage;
         firstStep = Math.max(1, lastStep-o.linksCount+1);
     }
-
-    for(var i=firstStep; i <= lastStep; i++){
-        var selected = (i==c.currentPage) ? ' selected' : '';
-        html.push('<li class="' + r.itemClass + selected + '"><a href="'+createUrl(i)+'">'+i+'</a></li>');
+    if (lastStep != firstStep) {
+        for(var i=firstStep; i <= lastStep; i++){
+            var selected = (i==c.currentPage) ? ' selected' : '';
+            html.push('<li class="' + r.itemClass + selected + '"><a href="'+createUrl(i)+'">'+i+'</a></li>');
+        }
     }
 
     cls = '';

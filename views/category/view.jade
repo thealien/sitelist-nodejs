@@ -47,8 +47,7 @@ block content
                             sup.new  new
                     p.desc #{ cut(l.desc, 250)}
                 .clear
-            //<div>   // TODO
-            //    {{ cat_paginator }}
-            //</div>
+         div.paginator!= pagination.render()
+         br
     else
         h3 Нет ссылок в данной категории
