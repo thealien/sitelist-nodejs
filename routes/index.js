@@ -27,7 +27,6 @@ exports.feedback = function(req, res){
 // Category
 exports.category = function(req, res, next){
     var id = parseInt(req.params.id, 10);
-    console.log(req.params);
     var page = parseInt(req.params.page, 10) || 1;
     var limit = 20;
     models.Category.find(id).done(function(error, category){
@@ -153,4 +152,27 @@ exports.users = function(req, res, next){
     });
 }
 
+// Link
+exports.link = function(req, res, next){
 
+}
+
+exports.collection = function(req, res, next){
+    // TODO
+}
+
+exports.collection_rss = function(req, res, next){
+    // TODO
+}
+
+exports.user = function(req, res, next){
+    // TODO
+}
+
+exports.rss = function(req, res, next){
+    // TODO
+}
+
+exports.category_rss = function(req, res, next){
+    // TODO
+}

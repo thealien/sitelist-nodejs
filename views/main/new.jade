@@ -21,14 +21,14 @@ block content
         for l, index in links
             .new-site
                 .photo.left
-                    a(href='/link/#{l.id}/#{l.domain}/')
+                    a(href='/link/#{l.id}/#{l.domain}')
                         img.photo(width='200', src='/foto/t_#{l.foto}', alt='#{l.title}')
                 .favicon.left
                     if l.domain!=false
                         div(class='faviconed fav_#{index}')
                 .site.right
                     h2.name
-                        a(title='#{l.title}', href='/link/#{l.id}/#{l.domain}/') #{l.title}
+                        a(title='#{l.title}', href='/link/#{l.id}/#{l.domain}') #{l.title}
                     p.desc #{cut(l.desc, 250)}
                     div
                         ul.site-rate(id='site#{l.id}')

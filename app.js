@@ -78,6 +78,20 @@ app.get('/new/:page', routes.new);
 app.get('/users', routes.users);
 app.get('/users/:page', routes.users);
 
+app.get('/user/:username', routes.user);
+
+app.get('/link/:id*', routes.link);
+
+app.get('/collection/:id', routes.collection);
+app.get('/collection/rss/:id', routes.collection_rss);
+
+
+app.get('/rss/:category', routes.category_rss); //TODO
+app.get('/rss', routes.rss); //TODO
+
+
+
+
 
 
 

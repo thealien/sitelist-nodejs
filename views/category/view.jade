@@ -42,7 +42,7 @@ block content
                         div(class="faviconed fav_#{index}")
                 .right.site
                     h2.name
-                        a(title='#{l.title}', href='/link/#{l.id}/#{l.domain}/') #{l.title}
+                        a(title='#{l.title}', href='/link/#{l.id}/#{l.domain}') #{l.title}
                         if l.isNew()
                             sup.new  new
                     p.desc #{ cut(l.desc, 250)}

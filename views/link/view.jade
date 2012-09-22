@@ -1,0 +1,213 @@
+extends ../layouts/main
+
+block add_meta
+    link(
+        rel="alternate",
+        type="application/atom+xml" ,
+        title="Новые сайты в каталоге SiteList.in - #{category.catname}",
+        href="/rss/seo#{category.alias}"
+    )
+
+block rss_link
+    a.rss_twitter_fb.rss(target='_blank', href="/rss/#{category.alias}", title='RSS-лента новых сайтов в категории "#{category.catname}")
+
+block add_css
+    link(
+        href="http://js.sitelist.in/fancybox/jquery.fancybox-1.3.1.min.css",
+        rel="stylesheet",
+        type="text/css"
+    )
+
+block add_js
+    script(extsrc='http://js.sitelist.in/fancybox/jquery.fancybox-1.3.1.pack.js')
+    script(extsrc="http://yandex.st/share/share.js")
+
+block add_head
+    meta(property="og:title", content="#{link.title}")
+    meta(property="og:image", content="/foto/#{link.foto}")
+    meta(property="og:site_name", content="Каталог сайтов Sitelist.in")
+
+block content
+    if link.visible
+        input#linkId(type='hidden', value='#{link.id}')
+        #site-info
+            // категория
+            #category-head
+                .category-info.left
+                    div(class='left cat-logo cat-#{category.alias}')
+                    .info.left
+                        p.name
+                            a(href='/category/#{category.id}/#{category.alias}') #{category.catname}
+                        p.link-count= word_ending(category.linksCount, "сайт сайта сайтов")
+                // пузомерки
+                .puzomerki.left
+                        .yandex_ci
+                            if ci_is_old
+                                input#ci_is_old(type='hidden', value=true)
+                            if pr_is_old
+                                input#pr_is_old(type='hidden'  value=true)
+                            img(width='16', height='16', src='/images/yandex.png', alt='Яндекс.тИЦ')
+                            | <b>тИЦ</b>:&nbsp;
+                            span#yandex_ci #{link.ci}
+                        .google_pr
+                            img(width='16', height='16', src='/images/google.png', alt='Google.PR')
+                            | <b>PR</b>:&nbsp;
+                            span#google_pr #{link.pr}
+                // QR
+                #qr-code
+                    .img-wrapper
+                        a.thumbnail.fancy(target=_blank, href='http://api.qrserver.com/v1/create-qr-code/?data=#{link.domain}&amp;size=300x300&.jpg')
+                            img(
+                                width='64',
+                                height='64',
+                                alt='QR-code',
+                                title='Это QR-код адреса сайта &laquo;#{link.title}&raquo; (кликните для увеличения)',
+                                src='http://api.qrserver.com/v1/create-qr-code/?data=#{link.domain}&amp;size=64x64'
+                            )
+                .clear
+
+            // описание сайта
+            .new-site
+                .photo.left
+                    if link.foto
+                        a.thumbnail.fancy(target=_blank href='/foto/#{link.foto}')
+                            img.photo(
+                                title='Кликните для просмотра в полный размер',
+                                width='200',
+                                src='/foto/t_#{link.foto}',
+                                alt='#{link.title}'
+                            )
+                    #link-share
+                        script(asyncsrc="http://connect.facebook.net/ru_RU/all.js#xfbml=1")
+                        | <fb:like href="/link/#{link.id}" layout="button_count" width="136" font="arial"></fb:like>
+                        .right(style='padding:0 0 0 2px;')
+                            script(asyncsrc="https://apis.google.com/js/plusone.js")
+                            | <g:plusone size="medium" href="#{link.url}"></g:plusone>
+                .favicon.left
+                    if link.domain!=false
+                        img(
+                            width='16',
+                            height='16',
+                            src='http://favicon.yandex.ru/favicon/#{link.domain}',
+                            alt='#{link.domain}'
+                        )
+                .site.right
+                    h2.name
+                        a(title='#{link.title}', href='#{link.url}', target='_blank') #{link.title}
+                    p.desc nl2div( #{link.desc} )
+                    div
+                        ul.site-rate(id='site#{link.id}')
+                            - var cls = link.voted ?"":" active"
+                            li.rate
+                                - var title = link.voted?"Вы уже голосовали":"Нравится"
+                                a(
+                                    title='#{title}',
+                                    class='site#{link.id} t-up#{cls}', href='javascript:void(0)'
+                                )
+                            li(class='rate-value site#{link.id}', title='Рейтинг: #{link.rate} [голосов: #{link.votes}]') #{link.rate}
+                            li.rate
+                                - var title = link.voted?"Вы уже голосовали":"Не нравится"
+                                a(
+                                    title='#{title}',
+                                    class='site#{link.id} t-down#{cls}',
+                                    href='javascript:void(0)'
+                                )
+                    .clear
+                    br
+                    .tagslist
+                        for tag in link.getTags
+                            {{ CHtml.link(tag, {0:'tag/view', "tag":tag}, {"class":"tag"}) }}
+                        {# % if not loop.last %},{% endif % #}
+                        {% endfor %}
+                    </div>
+                    <div class='clear'></div>
+                    {% if not Yii.user.isGuest %}
+                      <!-- коллекции -->
+                        <div class='collect-info'>
+                            {% include "views/collection/ajax/info_site_collections.html" %}
+                        </div>
+                        <div class='collect-add-panel'></div>
+                      <!-- /коллекции -->
+                    {% endif %}
+                </div>
+
+
+
+
+                <div class='clear'></div>
+            </div>
+
+            <!-- жалоба на неработающий сайт -->
+            <div id='broken-site'>
+                <div class='wrapper'>
+                {% if not link.broken %}
+                <div class='left-text'>
+                    Если ссылка в нашем каталоге ведет на неработающий сайт, сообщите нам об этом
+                </div>
+                <div class='send-btn'>
+                    <a title='Сообщить модератору, что сайт не работает' href='javascript:void(0);' class='send-btn-link'>Сайт не работает</a>
+                </div>
+                {% else %}
+                <div class='text'>
+                    • возможно данный сайт сейчас не работает •
+                </div>
+                {% endif %}
+                </div>
+            </div>
+            <!-- / -->
+
+            <!-- комментарии -->
+            <div id='add-comment' class='forms'>
+            <form action='' method="post" onsubmit="return sendComment($(this));">
+            <input type='hidden' name='link_id' value='{{ link.id }}'>
+            <div class='right'>
+                <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="none" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,lj,friendfeed"></div>
+            </div>
+            <p class='title'>Оставь свой отзыв:<!--Добавить комментарий:--></p>
+            <br>
+            <div id='errors'></div>
+            {% if Yii.user.isGuest %}
+            <p>
+                <b>Ваше имя</b><br>
+                <input maxlength="32" type="text" name="Comment[user]" size='32' value=''>
+            </p>
+            {% endif %}
+            <p>
+                <b>Текст сообщения</b>
+                <textarea class='desc' cols="5" name="Comment[text]" rows="5"></textarea>
+            </p>
+            <br>
+            <div>
+                <ul class='line right'>
+                {% if Yii.user.isGuest %}
+                <li class='line-item'>
+                    {{ this.widget('CCaptcha', {'captchaAction':"ajax/captcha"}, true) }}
+                </li>
+                <li class='line-item'>
+                    <input class='icaptcha' maxlength='10' size='10' title='Введите код с картинки левее. Это нужно для того, чтобы подтвердить, что вы не робот ;)' name="Comment[captcha]">
+                </li>
+                {% endif %}
+                <li class='line-item'>
+                    <input class='add-btn' type="submit" name="comaddbtn" value=''>
+                </li>
+                </ul>
+            </div>
+            <div class='clear'></div>
+            </form>
+
+            <!-- листинг комментов -->
+            <div id='comments'>
+                <br>
+                {% if link.comments_users %}
+                {% for c in link.comments_users %}
+                    {% include "views/layouts/comment.html" %}
+                {% endfor %}
+                {% endif %}
+            </div>
+            </div>
+
+        </div>
+        {% else %}
+<h3>Данный сайт еще не утвержден модератором</h3>
+{% endif %}
+{% endblock %}
