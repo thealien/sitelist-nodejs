@@ -8,6 +8,7 @@ var pagerUsers = LinkPager.create(30, 10);
 // Main page
 exports.index = function(req, res){
     models.Category.getRootCats(function(error, categories){
+        console.log(categories);
         res.render('main/index', {
             categories: categories
         });

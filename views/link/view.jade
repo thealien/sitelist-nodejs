@@ -116,98 +116,27 @@ block content
                     br
                     .tagslist
                         for tag in link.getTags
-                            {{ CHtml.link(tag, {0:'tag/view', "tag":tag}, {"class":"tag"}) }}
-                        {# % if not loop.last %},{% endif % #}
-                        {% endfor %}
-                    </div>
-                    <div class='clear'></div>
-                    {% if not Yii.user.isGuest %}
-                      <!-- коллекции -->
-                        <div class='collect-info'>
-                            {% include "views/collection/ajax/info_site_collections.html" %}
-                        </div>
-                        <div class='collect-add-panel'></div>
-                      <!-- /коллекции -->
-                    {% endif %}
-                </div>
+                            a.tag(href="/tag/#{tag}") #{tag},
+                    .clear
+                .clear
 
+            // жалоба на неработающий сайт
+            #broken-site
+                .wrapper
+                    if link.broken
+                        .left-text Если ссылка в нашем каталоге ведет на неработающий сайт, сообщите нам об этом
+                        .send-btn'>
+                            a.send-btn-link(title='Сообщить модератору, что сайт не работает', href='javascript:void(0);') Сайт не работает
+                    else
+                        .text • возможно данный сайт сейчас не работает •
 
-
-
-                <div class='clear'></div>
-            </div>
-
-            <!-- жалоба на неработающий сайт -->
-            <div id='broken-site'>
-                <div class='wrapper'>
-                {% if not link.broken %}
-                <div class='left-text'>
-                    Если ссылка в нашем каталоге ведет на неработающий сайт, сообщите нам об этом
-                </div>
-                <div class='send-btn'>
-                    <a title='Сообщить модератору, что сайт не работает' href='javascript:void(0);' class='send-btn-link'>Сайт не работает</a>
-                </div>
-                {% else %}
-                <div class='text'>
-                    • возможно данный сайт сейчас не работает •
-                </div>
-                {% endif %}
-                </div>
-            </div>
-            <!-- / -->
-
-            <!-- комментарии -->
-            <div id='add-comment' class='forms'>
-            <form action='' method="post" onsubmit="return sendComment($(this));">
-            <input type='hidden' name='link_id' value='{{ link.id }}'>
-            <div class='right'>
-                <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="none" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,lj,friendfeed"></div>
-            </div>
-            <p class='title'>Оставь свой отзыв:<!--Добавить комментарий:--></p>
-            <br>
-            <div id='errors'></div>
-            {% if Yii.user.isGuest %}
-            <p>
-                <b>Ваше имя</b><br>
-                <input maxlength="32" type="text" name="Comment[user]" size='32' value=''>
-            </p>
-            {% endif %}
-            <p>
-                <b>Текст сообщения</b>
-                <textarea class='desc' cols="5" name="Comment[text]" rows="5"></textarea>
-            </p>
-            <br>
-            <div>
-                <ul class='line right'>
-                {% if Yii.user.isGuest %}
-                <li class='line-item'>
-                    {{ this.widget('CCaptcha', {'captchaAction':"ajax/captcha"}, true) }}
-                </li>
-                <li class='line-item'>
-                    <input class='icaptcha' maxlength='10' size='10' title='Введите код с картинки левее. Это нужно для того, чтобы подтвердить, что вы не робот ;)' name="Comment[captcha]">
-                </li>
-                {% endif %}
-                <li class='line-item'>
-                    <input class='add-btn' type="submit" name="comaddbtn" value=''>
-                </li>
-                </ul>
-            </div>
-            <div class='clear'></div>
-            </form>
-
-            <!-- листинг комментов -->
-            <div id='comments'>
-                <br>
-                {% if link.comments_users %}
-                {% for c in link.comments_users %}
-                    {% include "views/layouts/comment.html" %}
-                {% endfor %}
-                {% endif %}
-            </div>
-            </div>
-
-        </div>
-        {% else %}
-<h3>Данный сайт еще не утвержден модератором</h3>
-{% endif %}
-{% endblock %}
+            // комментарии
+            #add-comment.forms
+                //листинг комментов
+                #comments
+                    br
+                    if link.comments_users
+                        for c in link.comments_users
+                            include ../layouts/comment
+    else
+        h3 Данный сайт еще не утвержден модератором

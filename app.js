@@ -36,6 +36,7 @@ app.configure('production', function(){
 //
 function getLastLinks(req, res, next){
     models.Link.getLastLinks(function(error, lastLinks){
+        console.log(error);
         if(!error)
             res.locals.lastLinks = lastLinks;
         next();
